@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <?php 
 $con=mysqli_connect("localhost","root","","hospitalms");
 
@@ -261,7 +262,7 @@ if(isset($_POST['docsub1']))
               <div class="col-md-8">
       <form class="form-group" action="doctorsearch.php" method="post">
         <div class="row">
-        <div class="col-md-10"><input type="text" name="doctor_contact" placeholder="Enter Email ID" class = "form-control"></div>
+        <div class="col-md-10"><input type="text" name="doctor_contact" placeholder="Search Doctor" class = "form-control"></div>
         <div class="col-md-2"><input type="submit" name="doctor_search_submit" class="btn btn-primary" value="Search"></div></div>
       </form>
     </div>
@@ -313,7 +314,7 @@ if(isset($_POST['docsub1']))
        <div class="col-md-8">
       <form class="form-group" action="patientsearch.php" method="post">
         <div class="row">
-        <div class="col-md-10"><input type="text" name="patient_contact" placeholder="Enter Contact" class = "form-control"></div>
+        <div class="col-md-10"><input type="text" name="patient_contact" placeholder="Search Patient" class = "form-control"></div>
         <div class="col-md-2"><input type="submit" name="patient_search_submit" class="btn btn-primary" value="Search"></div></div>
       </form>
     </div>
@@ -428,7 +429,7 @@ if(isset($_POST['docsub1']))
          <div class="col-md-8">
       <form class="form-group" action="appsearch.php" method="post">
         <div class="row">
-        <div class="col-md-10"><input type="text" name="app_contact" placeholder="Enter Contact" class = "form-control"></div>
+        <div class="col-md-10"><input type="text" name="app_contact" placeholder="Search Appointment" class = "form-control"></div>
         <div class="col-md-2"><input type="submit" name="app_search_submit" class="btn btn-primary" value="Search"></div></div>
       </form>
     </div>

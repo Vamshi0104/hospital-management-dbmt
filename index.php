@@ -1,3 +1,7 @@
+<?php
+opcache_reset();
+?>
+
 <html>
 <head>
 	<title>HMS</title>
