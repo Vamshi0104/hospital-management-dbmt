@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<?php 
-include('func.php');  
+<?php
+include('func.php');
 include('newfunc.php');
 $con=mysqli_connect("localhost","root","","hospitalms");
 
@@ -28,6 +28,7 @@ if(isset($_POST['app-submit']))
   $email=$_SESSION['email'];
   # $fees=$_POST['fees'];
   $docFees=$_POST['docFees'];
+  $insurance_id=$_POST['higherText'];
 
   $appdate=$_POST['appdate'];
   $apptime=$_POST['apptime'];
@@ -36,7 +37,14 @@ if(isset($_POST['app-submit']))
   $cur_time = date("H:i:s");
   $apptime1 = strtotime($apptime);
   $appdate1 = strtotime($appdate);
-	
+
+
+  $query2=mysqli_query($con,"select * from insurancedb where insurance_status = 0 and insurance_id = '$insurance_id';");
+  if(mysqli_num_rows($query2)==1)
+  {
+    echo "<script>alert('Oops!! There is issue with your Insurance Claim Status Limit, Please reach out to Insurance department to proceed further for booking appointment');window.location.href='./admin-panel.php';</script>";
+  }
+
   if(date("Y-m-d",$appdate1)>=$cur_date){
     if((date("Y-m-d",$appdate1)==$cur_date and date("H:i:s",$apptime1)>$cur_time) or date("Y-m-d",$appdate1)>$cur_date) {
       $check_query = mysqli_query($con,"select apptime from appointmenttb where doctor='$doctor' and appdate='$appdate' and apptime='$apptime'");
@@ -63,7 +71,7 @@ if(isset($_POST['app-submit']))
   else{
       echo "<script>alert('Select a time or date in the future!');</script>";
   }
-  
+
 }
 
 if(isset($_GET['cancel']))
@@ -95,11 +103,11 @@ function generate_bill(){
     <label> Allergies : </label>'.$row["allergy"].'<br/><br/>
     <label> Prescription : </label>'.$row["prescription"].'<br/><br/>
     <label> Fees Paid : </label>$'.$row["docFees"].'<br/>
-    
+
     ';
 
   }
-  
+
   return $output;
 }
 
@@ -127,10 +135,10 @@ if(isset($_GET["generate_bill"])){
       <br/>
       <h2 align ="center"> Hospital Management System</h2></br>
       <h3 align ="center"> Bill</h3>
-      
+
 
   ';
- 
+
   $content .= generate_bill();
   $obj_pdf -> writeHTML($content);
   ob_end_clean();
@@ -161,13 +169,13 @@ function get_specs(){
     <link rel="stylesheet" type="text/css" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
     <!-- Bootstrap CSS -->
-    
+
         <link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
+
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
   <a class="navbar-brand" href="#"><i class="fa fa-hospital-o" aria-hidden="true"></i> Hospital Management System</a>
@@ -186,7 +194,7 @@ function get_specs(){
 .list-group-item.active {
     z-index: 2;
     color: #fff;
-    background: #F0F2F0; 
+    background: #F0F2F0;
     background: -webkit-linear-gradient(to right, #000C40, #F0F2F0);
     background: linear-gradient(to right, #000C40, #F0F2F0);
     border-color: #c3c3c3;
@@ -218,9 +226,9 @@ function get_specs(){
     #inputbtn:hover{cursor:pointer;}
   </style>
   <body style="padding-top:50px;">
-  
+
    <div class="container-fluid" style="margin-top:50px;">
-    <h3 style = "margin-left: 40%;  padding-bottom: 20px; font-family: 'IBM Plex Sans', sans-serif;"> Welcome &nbsp<?php echo $username ?> 
+    <h3 style = "margin-left: 40%;  padding-bottom: 20px; font-family: 'IBM Plex Sans', sans-serif;"> Welcome &nbsp<?php echo $username ?>
    </h3>
     <div class="row">
   <div class="col-md-4" style="max-width:25%; margin-top: 3%">
@@ -229,7 +237,7 @@ function get_specs(){
       <a class="list-group-item list-group-item-action" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Book Appointment</a>
       <a class="list-group-item list-group-item-action" href="#app-hist" id="list-pat-list" role="tab" data-toggle="list" aria-controls="home">Appointment History</a>
       <a class="list-group-item list-group-item-action" href="#list-pres" id="list-pres-list" role="tab" data-toggle="list" aria-controls="home">Prescriptions</a>
-      
+
     </div><br>
   </div>
   <div class="col-md-8" style="margin-top: 3%;">
@@ -248,7 +256,7 @@ function get_specs(){
                         function clickDiv(id) {
                           document.querySelector(id).click();
                         }
-                      </script>                      
+                      </script>
                       <p class="links cl-effect-1">
                         <a href="#list-home" onclick="clickDiv('#list-home-list')">
                           Book Appointment
@@ -263,7 +271,7 @@ function get_specs(){
                     <div class="panel-body" >
                       <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-paperclip fa-stack-1x fa-inverse"></i> </span>
                       <h4 class="StepTitle" style="margin-top: 5%;">My Appointments</h2>
-                    
+
                       <p class="cl-effect-1">
                         <a href="#app-hist" onclick="clickDiv('#list-pat-list')">
                           View Appointment History
@@ -279,7 +287,7 @@ function get_specs(){
                     <div class="panel-body" >
                       <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-file-powerpoint-o fa-stack-1x fa-inverse"></i> </span>
                       <h4 class="StepTitle" style="margin-top: 5%;">Prescriptions</h2>
-                    
+
                       <p class="cl-effect-1">
                         <a href="#list-pres" onclick="clickDiv('#list-pres-list')">
                           View Prescription List
@@ -288,8 +296,8 @@ function get_specs(){
                     </div>
                   </div>
                 </div>
-                
-         
+
+
             </div>
           </div>
 
@@ -304,7 +312,7 @@ function get_specs(){
               <center><h4>Book Appointment</h4></center><br>
               <form class="form-group" method="post" action="admin-panel.php">
                 <div class="row">
-                  
+
                   <!-- <?php
 
                         $con=mysqli_connect("localhost","root","","hospitalms");
@@ -317,7 +325,7 @@ function get_specs(){
                           echo json_encode($docarray);
 
                   ?> -->
-        
+
 
                     <div class="col-md-4">
                           <label for="spec">Specialization:</label>
@@ -325,7 +333,7 @@ function get_specs(){
                         <div class="col-md-8">
                           <select name="spec" class="form-control" id="spec">
                               <option value="" disabled selected>Select Specialization</option>
-                              <?php 
+                              <?php
                               display_specs();
                               ?>
                           </select>
@@ -335,10 +343,10 @@ function get_specs(){
 
                         <script>
                       document.getElementById('spec').onchange = function foo() {
-                        let spec = this.value;   
+                        let spec = this.value;
                         console.log(spec)
                         let docs = [...document.getElementById('doctor').options];
-                        
+
                         docs.forEach((el, ind, arr)=>{
                           arr[ind].setAttribute("style","");
                           if (el.getAttribute("data-spec") != spec ) {
@@ -353,10 +361,10 @@ function get_specs(){
                 <div class="col-md-8">
                     <select name="doctor" class="form-control" id="doctor" required="required">
                       <option value="" disabled selected>Select Doctor</option>
-                
+
                       <?php display_docs(); ?>
                     </select>
-                  </div><br/><br/> 
+                  </div><br/><br/>
 
 
                         <script>
@@ -366,15 +374,15 @@ function get_specs(){
               };
             </script>
 
-                  
-                  
 
-                  
+
+
+
                         <!-- <div class="col-md-4"><label for="doctor">Doctors:</label></div>
                                 <div class="col-md-8">
                                     <select name="doctor" class="form-control" id="doctor1" required="required">
                                       <option value="" disabled selected>Select Doctor</option>
-                                      
+
                                     </select>
                                 </div>
                                 <br><br> -->
@@ -399,18 +407,18 @@ function get_specs(){
                                     }
                                 </script> -->
 
-                        
+
                     <!-- <script>
-                    let data = 
-                
+                    let data =
+
               document.getElementById('spec').onchange = function updateSpecs(e) {
-                let values = data.filter(obj => obj.spec == this.value).map(o => o.username);   
+                let values = data.filter(obj => obj.spec == this.value).map(o => o.username);
                 document.getElementById('doctor1').value = document.querySelector(`[value=${values}]`).getAttribute('data-value');
               };
             </script> -->
 
 
-                  
+
                   <div class="col-md-4"><label for="consultancyfees">
                                 Consultancy Fees
                               </label></div>
@@ -436,19 +444,27 @@ function get_specs(){
 
                   </div><br><br>
 
+
+                                     <div class="col-md-4"><label>Do you have Insurance :</label></div>
+                                     <div class="col-md-8"><input type="checkbox" class="form-control checkbox"  value="higherText" id="higherCheck" onclick="toggleCheckbox(this)"></input>
+                                                                 <br><br><input type="text" id="higherText" name="higherText" class="form-control" title="Enter Insurance ID" placeholder="Enter Insurance ID" class="row" style="text-align:center;font-size:20px;display:none;" /></div><br><br>
+
+
+<br><br>
+
                   <div class="col-md-4">
                     <input type="submit" name="app-submit" value="Create new entry" class="btn btn-primary" id="inputbtn">
                   </div>
-                  <div class="col-md-8"></div>                  
+                  <div class="col-md-8"></div>
                 </div>
               </form>
             </div>
           </div>
         </div><br>
       </div>
-      
+
 <div class="tab-pane fade" id="app-hist" role="tabpanel" aria-labelledby="list-pat-list">
-        
+
               <table class="table table-hover">
                 <thead>
                   <tr>
@@ -462,7 +478,7 @@ function get_specs(){
                   </tr>
                 </thead>
                 <tbody>
-                  <?php 
+                  <?php
 
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
@@ -471,7 +487,7 @@ function get_specs(){
                     $result = mysqli_query($con,$query);
                     $cnt=1;
                     while ($row = mysqli_fetch_array($result)){
-              
+
                       #$fname = $row['fname'];
                       #$lname = $row['lname'];
                       #$email = $row['email'];
@@ -483,36 +499,36 @@ function get_specs(){
                         <td><?php echo '$'.$row['docFees'];?></td>
                         <td><?php echo $row['appdate'];?></td>
                         <td><?php echo $row['apptime'];?></td>
-                        
+
                           <td>
-                    <?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))  
+                    <?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))
                     {
                       echo "Active";
                     }
-                    if(($row['userStatus']==0) && ($row['doctorStatus']==1))  
+                    if(($row['userStatus']==0) && ($row['doctorStatus']==1))
                     {
                       echo "Cancelled by You";
                     }
 
-                    if(($row['userStatus']==1) && ($row['doctorStatus']==0))  
+                    if(($row['userStatus']==1) && ($row['doctorStatus']==0))
                     {
                       echo "Cancelled by Doctor";
                     }
                         ?></td>
 
                         <td>
-                        <?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))  
+                        <?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))
                         { ?>
 
-													
-	                        <a href="admin-panel.php?ID=<?php echo $row['ID']?>&cancel=update" 
+
+	                        <a href="admin-panel.php?ID=<?php echo $row['ID']?>&cancel=update"
                               onClick="return confirm('Are you sure you want to cancel this appointment ?')"
                               title="Cancel Appointment" tooltip-placement="top" tooltip="Remove"><button class="btn btn-danger">Cancel</button></a>
 	                        <?php } else {
 
                                 echo "Cancelled";
                                 } ?>
-                        
+
                         </td>
                       </tr>
                     <?php $cnt++; } ?>
@@ -524,11 +540,11 @@ function get_specs(){
 
 
       <div class="tab-pane fade" id="list-pres" role="tabpanel" aria-labelledby="list-pres-list">
-        
+
               <table class="table table-hover">
                 <thead>
                   <tr>
-                    
+
                     <th scope="col">Doctor</th>
                     <th scope="col">Appointment Date</th>
                     <th scope="col">Appointment Time</th>
@@ -539,18 +555,18 @@ function get_specs(){
                   </tr>
                 </thead>
                 <tbody>
-                  <?php 
+                  <?php
 
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
 
                     $query = "select doctor,ID,appdate,apptime,disease,allergy,prescription from prestb where pid='$pid';";
-                    
+
                     $result = mysqli_query($con,$query);
                     if(!$result){
                       echo mysqli_error($con);
                     }
-                    
+
 
                     while ($row = mysqli_fetch_array($result)){
                   ?>
@@ -563,7 +579,7 @@ function get_specs(){
                         <td><?php echo $row['prescription'];?></td>
                         <td>
                           <form method="get">
-                          <!-- <a href="admin-panel.php?ID=" 
+                          <!-- <a href="admin-panel.php?ID="
                               onClick=""
                               title="Pay Bill" tooltip-placement="top" tooltip="Remove"><button class="btn btn-success">Pay</button>
                               </a></td> -->
@@ -575,7 +591,7 @@ function get_specs(){
                               </td>
                               </form>
 
-                    
+
                       </tr>
                     <?php }
                     ?>
@@ -608,6 +624,11 @@ function get_specs(){
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.1/sweetalert2.all.min.js">
    </script>
+    <script>
+      function toggleCheckbox(e) {
+        document.getElementById(e.value).style.display = e.checked ? "initial" : "none";
+       }
+    </script>
 
 
 
