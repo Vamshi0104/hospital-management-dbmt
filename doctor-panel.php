@@ -265,6 +265,7 @@ if(isset($_GET['cancel']))
                     <th scope="col">Disease</th>
                     <th scope="col">Allergy</th>
                     <th scope="col">Prescribe</th>
+                    <th scope="col">Prescription Amount</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -273,7 +274,7 @@ if(isset($_GET['cancel']))
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
 
-                    $query = "select pid,fname,lname,ID,appdate,apptime,disease,allergy,prescription from prestb where doctor='$doctor';";
+                    $query = "select pid,fname,lname,ID,appdate,apptime,disease,allergy,prescription,presamt from prestb where doctor='$doctor';";
                     
                     $result = mysqli_query($con,$query);
                     if(!$result){
@@ -291,6 +292,7 @@ if(isset($_GET['cancel']))
                         <td><?php echo $row['disease'];?></td>
                         <td><?php echo $row['allergy'];?></td>
                         <td><?php echo $row['prescription'];?></td>
+                        <td><?php echo $row['presamt'];?></td>
                     
                       </tr>
                     <?php $cnt++; }

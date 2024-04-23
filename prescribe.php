@@ -29,8 +29,9 @@ if(isset($_POST['prescribe']) && isset($_POST['pid']) && isset($_POST['ID']) && 
   $pid = $_POST['pid'];
   $ID = $_POST['ID'];
   $prescription = $_POST['prescription'];
+  $presamt = $_POST['presamt'];
   
-  $query=mysqli_query($con,"insert into prestb(doctor,pid,ID,fname,lname,appdate,apptime,disease,allergy,prescription) values ('$doctor','$pid','$ID','$fname','$lname','$appdate','$apptime','$disease','$allergy','$prescription')");
+  $query=mysqli_query($con,"insert into prestb(doctor,pid,ID,fname,lname,appdate,apptime,disease,allergy,prescription,presamt) values ('$doctor','$pid','$ID','$fname','$lname','$appdate','$apptime','$disease','$allergy','$prescription','$presamt')");
     if($query)
     {
       echo "<script>alert('Prescribed successfully!');</script>";
@@ -137,6 +138,9 @@ if(isset($_POST['prescribe']) && isset($_POST['pid']) && isset($_POST['ID']) && 
                 <textarea id="prescription"class="form-control" rows ="5" name="prescription" required></textarea>
               </div>
                       
+              <label>Prescription Amount:</label>
+                <textarea id="presamt"class="form-control" rows ="1" name="presamt" required></textarea>
+              </div>
                      
                       
                       </div><br>
