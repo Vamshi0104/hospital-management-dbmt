@@ -4,7 +4,7 @@ $con=mysqli_connect("localhost","root","","hospitalms");
 if(isset($_POST['adsub'])){
 	$username=$_POST['username1'];
 	$password=$_POST['password2'];
-	$query="select * from admintb where username='$username' and password='$password';";
+	$query="select * from ADMIN where ADMIN_ID='$username' and ADMIN_PASSWORD='$password';";
 	$result=mysqli_query($con,$query);
 	if(mysqli_num_rows($result)==1)
 	{
@@ -20,7 +20,7 @@ if(isset($_POST['update_data']))
 {
 	$contact=$_POST['contact'];
 	$status=$_POST['status'];
-	$query="update appointmenttb set payment='$status' where contact='$contact';";
+	$query="update APPOINTMENT set payment='$status' where contact='$contact';";
 	$result=mysqli_query($con,$query);
 	if($result)
 		header("Location:updated.php");
@@ -32,7 +32,7 @@ if(isset($_POST['update_data']))
 function display_docs()
 {
 	global $con;
-	$query="select * from doctb";
+	$query="select * from DOCTOR";
 	$result=mysqli_query($con,$query);
 	while($row=mysqli_fetch_array($result))
 	{
@@ -45,7 +45,7 @@ function display_docs()
 if(isset($_POST['doc_sub']))
 {
 	$name=$_POST['name'];
-	$query="insert into doctb(name)values('$name')";
+	$query="insert into DOCTOR(name)values('$name')";
 	$result=mysqli_query($con,$query);
 	if($result)
 		header("Location:adddoc.php");

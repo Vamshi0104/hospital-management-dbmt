@@ -4,7 +4,7 @@ $con=mysqli_connect("localhost","root","","hospitalms");
 if(isset($_POST['search_submit'])){
   $contact=$_POST['contact'];
   $docname = $_SESSION['dname'];
- $query="select * from appointmenttb where contact='$contact' and doctor='$docname';";
+ $query="select * from APPOINTMENT where contact='$contact' and doctor='$docname';";
  $result=mysqli_query($con,$query);
  echo '<!DOCTYPE html>
 <html lang="en">

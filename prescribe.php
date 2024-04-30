@@ -7,31 +7,62 @@ $appdate='';
 $apptime='';
 $fname = '';
 $lname= '';
+
+$PID='';
+$DID='';
+$APID='';
+
 $doctor = $_SESSION['dname'];
-if(isset($_GET['pid']) && isset($_GET['ID']) && ($_GET['appdate']) && isset($_GET['apptime']) && isset($_GET['fname']) && isset($_GET['lname'])) {
-$pid = $_GET['pid'];
-  $ID = $_GET['ID'];
-  $fname = $_GET['fname'];
-  $lname = $_GET['lname'];
-  $appdate = $_GET['appdate'];
-  $apptime = $_GET['apptime'];
+
+if(isset($_GET['pid']) && isset($_GET['did']) && ($_GET['apid'])) {
+
+   $PID=$_GET['pid'];
+   $DID=$_GET['did'];
+   $APID=$_GET['apid'];
+//   $pid = $_GET['pid'];
+//   $ID = $_GET['ID'];
+//   $fname = $_GET['fname'];
+//   $lname = $_GET['lname'];
+//   $appdate = $_GET['appdate'];
+//   $apptime = $_GET['apptime'];
 }
 
 
 
-if(isset($_POST['prescribe']) && isset($_POST['pid']) && isset($_POST['ID']) && isset($_POST['appdate']) && isset($_POST['apptime']) && isset($_POST['lname']) && isset($_POST['fname'])){
-  $appdate = $_POST['appdate'];
-  $apptime = $_POST['apptime'];
+if(isset($_POST['prescribe']) && isset($_POST['PID']) && isset($_POST['DID']) && isset($_POST['APID'])){
+//   $appdate = $_POST['appdate'];
+//   $apptime = $_POST['apptime'];
+
+//   $fname = $_POST['fname'];
+//   $lname = $_POST['lname'];
+
+
+  $PID = $_POST['PID'];
+  $DID = $_POST['DID'];
+  $APID = $_POST['APID'];
+//   $ID = $_POST['ID'];
   $disease = $_POST['disease'];
   $allergy = $_POST['allergy'];
-  $fname = $_POST['fname'];
-  $lname = $_POST['lname'];
-  $pid = $_POST['pid'];
-  $ID = $_POST['ID'];
   $prescription = $_POST['prescription'];
   $presamt = $_POST['presamt'];
-  
-  $query=mysqli_query($con,"insert into prestb(doctor,pid,ID,fname,lname,appdate,apptime,disease,allergy,prescription,presamt) values ('$doctor','$pid','$ID','$fname','$lname','$appdate','$apptime','$disease','$allergy','$prescription','$presamt')");
+
+$query=mysqli_query($con,"insert into PRESCRIPTION(PATIENT_ID,DOCTOR_ID,APPOINTMENT_ID,DISEASE,ALLERGY,PRESCRIPTION,PRESCRIPTION_AMOUNT) values ('$PID','$DID','$APID','$disease','$allergy','$prescription','$presamt')");
+$q12=mysqli_query($con,"select PRESCRIPTION_ID from PRESCRIPTION ORDER BY PRESCRIPTION_ID DESC");
+      if($q12){
+        $row = mysqli_fetch_assoc($q12);
+        if($row){
+          $id_pa = $row['PRESCRIPTION_ID'];
+        }
+        }
+  $q14=mysqli_query($con,"select case when INSURANCE_STATUS='1' THEN COVERAGE_PERCENT else '0' end as abc from INSURANCE_DETAILS where PATIENT_ID='$PID'");
+      if($q14){
+        $row = mysqli_fetch_assoc($q14);
+        if($row){
+          $per = $row['abc'];
+        }
+        }
+        $tot=$presamt-(($presamt*$per)/100);
+        $q1=mysqli_query($con,"insert into billing(PATIENT_ID,TYPE,ID,AMOUNT,BALANCE_AMOUNT) values ('$PID','Prescription Fees','$id_pa','$presamt','$tot')");
     if($query)
     {
       echo "<script>alert('Prescribed successfully!');</script>";
@@ -39,10 +70,7 @@ if(isset($_POST['prescribe']) && isset($_POST['pid']) && isset($_POST['ID']) && 
     else{
       echo "<script>alert('Unable to process your request. Try again!');</script>";
     }
-  // else{
-  //   echo "<script>alert('GET is not working!');</script>";
-  // }initial
-  // enga error?
+
 }
 
 ?>
@@ -137,10 +165,10 @@ if(isset($_POST['prescribe']) && isset($_POST['pid']) && isset($_POST['ID']) && 
                 <label>Prescription:</label>
                 <textarea id="prescription"class="form-control" rows ="5" name="prescription" required></textarea>
               </div>
+                        <label>Prescription Amount:</label>
+                          <textarea id="presamt"class="form-control" rows ="1" name="presamt" required></textarea>
+                        </div>
                       
-              <label>Prescription Amount:</label>
-                <textarea id="presamt"class="form-control" rows ="1" name="presamt" required></textarea>
-              </div>
                      
                       
                       </div><br>
@@ -150,6 +178,10 @@ if(isset($_POST['prescribe']) && isset($_POST['pid']) && isset($_POST['ID']) && 
                       <input type="hidden" name="apptime" value="<?php echo $apptime ?>" />
                       <input type="hidden" name="pid" value="<?php echo $pid ?>" />
                       <input type="hidden" name="ID" value="<?php echo $ID ?>" />
+
+                      <input type="hidden" name="PID" value="<?php echo $PID ?>" />
+                      <input type="hidden" name="DID" value="<?php echo $DID ?>" />
+                      <input type="hidden" name="APID" value="<?php echo $APID ?>" />
                       <br><br>
                   <input type="submit" name="prescribe" value="Prescribe" class="btn btn-primary" style="margin-left: 40pc;">
             </div>

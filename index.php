@@ -1,7 +1,3 @@
-<?php
-opcache_reset();
-?>
-
 <html>
 <head>
 	<title>HMS</title>
@@ -36,6 +32,11 @@ opcache_reset();
 function alphaOnly(event) {
   var key = event.keyCode;
   return ((key >= 65 && key <= 90) || key == 8 || key == 32);
+};
+
+function notAlphaOnly(event) {
+  var key = event.keyCode;
+  return !((key >= 65 && key <= 90) || key == 8 || key == 32);
 };
 
 function checklen()
@@ -80,7 +81,7 @@ function checklen()
 <div class="container register" style="font-family: 'IBM Plex Sans', sans-serif;">
                 <div class="row">
                     <div class="col-md-3 register-left" style="margin-top: 10%;right: 5%">
-                        <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
+                        <img src="images/ambulance1.png" alt=""/>
                         <h3>Welcome</h3>
                        
                     </div>
@@ -153,7 +154,7 @@ function checklen()
                                 <div class="row register-form">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="User Name *" name="username3" onkeydown="return alphaOnly(event);" required/>
+                                            <input type="text" class="form-control" placeholder="User Name *" name="username3" onkeydown="return notAlphaOnly(event);" required/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -174,7 +175,7 @@ function checklen()
                                 <div class="row register-form">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="User Name *" name="username1" onkeydown="return alphaOnly(event);" required/>
+                                            <input type="text" class="form-control" placeholder="User Name *" name="username1" required/>
                                         </div>
                                         
 

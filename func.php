@@ -4,18 +4,18 @@ $con=mysqli_connect("localhost","root","","hospitalms");
 if(isset($_POST['patsub'])){
 	$email=$_POST['email'];
 	$password=$_POST['password2'];
-	$query="select * from patreg where email='$email' and password='$password';";
+	$query="select * from PATIENT where PATIENT_EMAIL='$email' and PATIENT_PASSWORD='$password';";
 	$result=mysqli_query($con,$query);
 	if(mysqli_num_rows($result)==1)
 	{
 		while($row=mysqli_fetch_array($result,MYSQLI_ASSOC)){
-      $_SESSION['pid'] = $row['pid'];
-      $_SESSION['username'] = $row['fname']." ".$row['lname'];
-      $_SESSION['fname'] = $row['fname'];
-      $_SESSION['lname'] = $row['lname'];
-      $_SESSION['gender'] = $row['gender'];
-      $_SESSION['contact'] = $row['contact'];
-      $_SESSION['email'] = $row['email'];
+      $_SESSION['pid'] = $row['PATIENT_ID'];
+      $_SESSION['username'] = $row['PATIENT_FIRST_NAME']." ".$row['PATIENT_LAST_NAME'];
+      $_SESSION['fname'] = $row['PATIENT_FIRST_NAME'];
+      $_SESSION['lname'] = $row['PATIENT_LAST_NAME'];
+      $_SESSION['gender'] = $row['PATIENT_GENDER'];
+      $_SESSION['contact'] = $row['PATIENT_CONTACT'];
+      $_SESSION['email'] = $row['PATIENT_EMAIL'];
     }
 		header("Location:admin-panel.php");
 	}
@@ -26,31 +26,16 @@ if(isset($_POST['patsub'])){
   }
 		
 }
-if(isset($_POST['update_data']))
-{
-	$contact=$_POST['contact'];
-	$status=$_POST['status'];
-	$query="update appointmenttb set payment='$status' where contact='$contact';";
-	$result=mysqli_query($con,$query);
-	if($result)
-		header("Location:updated.php");
-}
-
-
-
-
-// function display_docs()
+// if(isset($_POST['update_data']))
 // {
-// 	global $con;
-// 	$query="select * from doctb";
+// 	$contact=$_POST['contact'];
+// 	$status=$_POST['status'];
+// 	$query="update APPOINTMENT set payment='$status' where contact='$contact';";
 // 	$result=mysqli_query($con,$query);
-// 	while($row=mysqli_fetch_array($result))
-// 	{
-// 		$name=$row['name'];
-//     $cost=$row['docFees'];
-// 		echo '<option value="'.$name.'" data-price="' .$cost. '" >'.$name.'</option>';
-// 	}
+// 	if($result)
+// 		header("Location:updated.php");
 // }
+
 
 if(isset($_POST['doc_sub']))
 {
@@ -59,7 +44,7 @@ if(isset($_POST['doc_sub']))
   $dpassword=$_POST['dpassword'];
   $demail=$_POST['demail'];
   $docFees=$_POST['docFees'];
-	$query="insert into doctb(doctorname,username,password,email,docFees)values('$doctorname','$doctor','$dpassword','$demail','$docFees')";
+	$query="insert into DOCTOR(DOCTOR_NAME,DOCTOR_ID,DOCTOR_PASSWORD,DOCTOR_EMAIL,DOCTOR_FEES)values('$doctorname','$doctor','$dpassword','$demail','$docFees')";
 	$result=mysqli_query($con,$query);
 	if($result)
 		header("Location:adddoc.php");
@@ -116,7 +101,7 @@ function display_admin_panel(){
     </div><br>
   </div>
 
-  
+
 
 
 
@@ -164,7 +149,7 @@ function display_admin_panel(){
                   <div class="col-md-4">
                     <input type="submit" name="entry_submit" value="Create new entry" class="btn btn-primary" id="inputbtn">
                   </div>
-                  <div class="col-md-8"></div>                  
+                  <div class="col-md-8"></div>
                 </div>
               </form>
             </div>

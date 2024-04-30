@@ -11,10 +11,10 @@ include("newfunc.php");
 if(isset($_POST['mes_search_submit']))
 {
 	$contact=$_POST['mes_contact'];
-	$query = "select * from contact where contact= '$contact'";
+	$query = "select * from FEEDBACK where CONTACT= '$contact' or NAME= '$contact' or EMAIL= '$contact';";
   $result = mysqli_query($con,$query);
   $row=mysqli_fetch_array($result);
-  if($row['name']=="" & $row['email']=="" & $row['contact']=="" & $row['message']==""){
+  if($row['NAME']=="" & $row['EMAIL']=="" & $row['CONTACT']=="" & $row['MESSAGE']==""){
     echo "<script> alert('No entries found! Please enter valid details'); 
           window.location.href = 'admin-panel1.php#list-doc';</script>";
   } 
@@ -34,10 +34,10 @@ if(isset($_POST['mes_search_submit']))
     <tbody>";
   
     
-          $name = $row['name'];
-          $email = $row['email'];
-          $contact = $row['contact'];
-          $message = $row['message'];
+          $name = $row['NAME'];
+          $email = $row['EMAIL'];
+          $contact = $row['CONTACT'];
+          $message = $row['MESSAGE'];
           echo "<tr>
             <td>$name</td>
             <td>$email</td>

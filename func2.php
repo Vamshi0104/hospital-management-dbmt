@@ -10,7 +10,7 @@ if(isset($_POST['patsub1'])){
 	$password=$_POST['password'];
   $cpassword=$_POST['cpassword'];
   if($password==$cpassword){
-  	$query="insert into patreg(fname,lname,gender,email,contact,password,cpassword) values ('$fname','$lname','$gender','$email','$contact','$password','$cpassword');";
+  	$query="insert into PATIENT(PATIENT_FIRST_NAME,PATIENT_LAST_NAME,PATIENT_GENDER,PATIENT_EMAIL,PATIENT_CONTACT,PATIENT_PASSWORD) values ('$fname','$lname','$gender','$email','$contact','$password');";
     $result=mysqli_query($con,$query);
     if($result){
         $_SESSION['username'] = $_POST['fname']." ".$_POST['lname'];
@@ -22,10 +22,10 @@ if(isset($_POST['patsub1'])){
         header("Location:admin-panel.php");
     } 
 
-    $query1 = "select * from patreg;";
+    $query1 = "select * from PATIENT;";
     $result1 = mysqli_query($con,$query1);
     if($result1){
-      $_SESSION['pid'] = $row['pid'];
+      $_SESSION['pid'] = $row['PATIENT_ID'];
     }
 
   }
@@ -37,32 +37,17 @@ if(isset($_POST['update_data']))
 {
 	$contact=$_POST['contact'];
 	$status=$_POST['status'];
-	$query="update appointmenttb set payment='$status' where contact='$contact';";
+	$query="update APPOINTMENT set payment='$status' where contact='$contact';";
 	$result=mysqli_query($con,$query);
 	if($result)
 		header("Location:updated.php");
 }
 
 
-
-
-// function display_docs()
-// {
-// 	global $con;
-// 	$query="select * from doctb";
-// 	$result=mysqli_query($con,$query);
-// 	while($row=mysqli_fetch_array($result))
-// 	{
-// 		$name=$row['name'];
-// 		# echo'<option value="" disabled selected>Select Doctor</option>';
-// 		echo '<option value="'.$name.'">'.$name.'</option>';
-// 	}
-// }
-
 if(isset($_POST['doc_sub']))
 {
 	$name=$_POST['name'];
-	$query="insert into doctb(name)values('$name')";
+	$query="insert into DOCTOR(name)values('$name')";
 	$result=mysqli_query($con,$query);
 	if($result)
 		header("Location:adddoc.php");

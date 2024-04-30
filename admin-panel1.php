@@ -5,6 +5,15 @@ $con=mysqli_connect("localhost","root","","hospitalms");
 
 include('newfunc.php');
 
+  $query_doc=mysqli_query($con,"select * from DOCTOR;");
+  $query_pat=mysqli_query($con,"select * from PATIENT;");
+  $query_appointment=mysqli_query($con,"select * from APPOINTMENT;");
+  $query_pres=mysqli_query($con,"select * from PRESCRIPTION;");
+  $total_doc=mysqli_num_rows($query_doc);
+  $total_pat=mysqli_num_rows($query_pat);
+  $total_pres=mysqli_num_rows($query_pres);
+  $total_appointments=mysqli_num_rows($query_appointment);
+
 if(isset($_POST['docsub']))
 {
   $doctorname=$_POST['doctorname'];
@@ -13,7 +22,32 @@ if(isset($_POST['docsub']))
   $demail=$_POST['demail'];
   $spec=$_POST['special'];
   $docFees=$_POST['docFees'];
-  $query="insert into doctb(doctorname,username,password,email,spec,docFees)values('$doctorname','$doctor','$dpassword','$demail','$spec','$docFees')";
+  $docSpecId=0;
+    switch ($spec) {
+      case "General":
+        $docSpecId=1;
+        break;
+      case "Gynecologist":
+        $docSpecId=2;
+        break;
+      case "Oncologist":
+        $docSpecId=3;
+        break;
+      case "Cardiologist":
+        $docSpecId=4;
+        break;
+      case "Gastroenterologist":
+        $docSpecId=5;
+        break;
+      case "Neurologist":
+        $docSpecId=6;
+        break;
+      case "Pediatrician":
+        $docSpecId=7;
+        break;
+    }
+
+  $query="insert into DOCTOR(DOCTOR_NAME,DOCTOR_ID,DOCTOR_PASSWORD,DOCTOR_EMAIL,DOCTOR_SPEC,DOCTOR_FEES,DOCTOR_SPEC_ID)values('$doctorname','$doctor','$dpassword','$demail','$spec','$docFees','$docSpecId')";
   $result=mysqli_query($con,$query);
   if($result)
     {
@@ -24,8 +58,8 @@ if(isset($_POST['docsub']))
 
 if(isset($_POST['docsub1']))
 {
-  $demail=$_POST['demail'];
-  $query="delete from doctb where email='$demail';";
+  $doc_id=$_POST['doc_id'];
+  $query="delete from DOCTOR where DOCTOR_ID='$doc_id';";
   $result=mysqli_query($con,$query);
   if($result)
     {
@@ -76,6 +110,11 @@ if(isset($_POST['docsub1']))
   var key = event.keyCode;
   return ((key >= 65 && key <= 90) || key == 8 || key == 32);
 };
+
+function notAlphaOnly(event) {
+  var key = event.keyCode;
+  return !((key >= 65 && key <= 90) || key == 8 || key == 32);
+};
   </script>
 
   <style >
@@ -113,6 +152,32 @@ if(isset($_POST['docsub1']))
   background-color: #3c50c1;
   border-color: #3c50c1;
 }
+.container-fluid1{
+border:1px solid grey;
+box-shadow: 0px -5px 10px 0px rgba(0, 0, 0, 0.5);
+padding:15px;
+}
+
+    .row.content {
+        display: flex;
+  		justify-content: center;
+	}
+
+    .well{
+    	font-size: 26px;
+    	padding:10px;
+    	color:black;
+    	font-weight:600;
+    	border:1px solid grey;
+    	text-align:center;
+    	box-shadow: 0px -5px 10px 0px rgba(0, 0, 0, 0.5);
+    }
+    .well:hover{
+    	background-color: dodgerblue;
+    	color:white;
+    	border-radius: 8px;
+    	cursor:pointer;
+    }
   </style>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -133,7 +198,42 @@ if(isset($_POST['docsub1']))
   </style>
   <body style="padding-top:50px;">
    <div class="container-fluid" style="margin-top:50px;">
-    <h3 style = "margin-left: 40%; padding-bottom: 20px;font-family: 'IBM Plex Sans', sans-serif;"> WELCOME ADMINISTRATOR </h3>
+    <h2 style = "margin-left: 40%; padding-bottom: 20px;font-family: 'IBM Plex Sans', sans-serif;"> WELCOME ADMINISTRATOR </h2><br><br>
+      <div class="container-fluid1">
+        <div class="row content">
+          <div class="col-sm-8">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="well">
+                  <h4>Patients</h4>
+                  <p><?php echo $total_pat; ?></p>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="well">
+                  <h4>Appointments</h4>
+                  <p><?php echo $total_appointments; ?></p>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="well">
+                  <h4>Prescriptions</h4>
+                  <p><?php echo $total_pres; ?></p>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="well">
+                  <h4>Doctors</h4>
+                  <p><?php echo $total_doc; ?></p>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  <br><br>
     <div class="row">
   <div class="col-md-4" style="max-width:25%;margin-top: 3%;">
     <div class="list-group" id="list-tab" role="tablist">
@@ -281,16 +381,16 @@ if(isset($_POST['docsub1']))
                   <?php 
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
-                    $query = "select * from doctb";
+                    $query = "select * from DOCTOR";
                     $result = mysqli_query($con,$query);
                     $cnt=1;
                     while ($row = mysqli_fetch_array($result)){
-                      $doctorname = $row['doctorname'];
-                      $spec = $row['spec'];
-                      $email = $row['email'];
-                      $username = $row['username'];
-                      $password = $row['password'];
-                      $docFees = $row['docFees'];
+                      $doctorname = $row['DOCTOR_NAME'];
+                      $spec = $row['DOCTOR_SPEC'];
+                      $email = $row['DOCTOR_EMAIL'];
+                      $username = $row['DOCTOR_ID'];
+                      $password = $row['DOCTOR_PASSWORD'];
+                      $docFees = $row['DOCTOR_FEES'];
                       
                       echo "<tr>
                         <td>$cnt</td>
@@ -333,16 +433,16 @@ if(isset($_POST['docsub1']))
                   <?php 
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
-                    $query = "select * from patreg";
+                    $query = "select * from PATIENT";
                     $result = mysqli_query($con,$query);
                     $cnt=1;
                     while ($row = mysqli_fetch_array($result)){
-                      $pid = $row['pid'];
-                      $fname = $row['fname'];
-                      $lname = $row['lname'];
-                      $gender = $row['gender'];
-                      $email = $row['email'];
-                      $contact = $row['contact'];
+                      $pid = $row['PATIENT_ID'];
+                      $fname = $row['PATIENT_FIRST_NAME'];
+                      $lname = $row['PATIENT_LAST_NAME'];
+                      $gender = $row['PATIENT_GENDER'];
+                      $email = $row['PATIENT_EMAIL'];
+                      $contact = $row['PATIENT_CONTACT'];
                       
                       echo "<tr>
                         <td>$cnt</td>
@@ -385,31 +485,32 @@ if(isset($_POST['docsub1']))
                   <?php 
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
-                    $query = "select * from prestb";
+                    $query = "select * from PRESCRIPTION pr inner join DOCTOR d on pr.DOCTOR_ID = d.DOCTOR_ID inner join APPOINTMENT a on a.PATIENT_ID = pr.PATIENT_ID inner join PATIENT p on a.PATIENT_ID = p.PATIENT_ID";
                     $result = mysqli_query($con,$query);
                     $cnt=1;
                     while ($row = mysqli_fetch_array($result)){
-                      $doctor = $row['doctor'];
-                      $pid = $row['pid'];
-                      $ID = $row['ID'];
-                      $fname = $row['fname'];
-                      $lname = $row['lname'];
-                      $appdate = $row['appdate'];
-                      $apptime = $row['apptime'];
-                      $disease = $row['disease'];
-                      $allergy = $row['allergy'];
-                      $pres = $row['prescription'];
+                      $doctor = $row['DOCTOR_ID'];
+                      $pid = $row['PATIENT_ID'];
+                      $ID = $row['DOCTOR_ID'];
+                      $fname = $row['PATIENT_FIRST_NAME'];
+                      $lname = $row['PATIENT_LAST_NAME'];
+                      $appdate = $row['APPOINTMENT_DATE'];
+                      $apptime = $row['APPOINTMENT_TIME'];
+                      $disease = $row['DISEASE'];
+                      $allergy = $row['ALLERGY'];
+                      $pres = $row['PRESCRIPTION'];
 
                       
                       echo "<tr>
                       <td>$cnt</td>
                         <td>$doctor</td>
                         <td>$fname $lname</td>
-                        <td>$appdate</td>
+                     <td>$appdate</td>
                         <td>$apptime</td>
-                        <td>$disease</td>
-                        <td>$allergy</td>
-                        <td>$pres</td>
+                       <td>$disease</td>
+                     <td>$allergy</td>
+                    <td>$pres</td>
+
                       </tr>";
                    $cnt++; }
 
@@ -455,32 +556,32 @@ if(isset($_POST['docsub1']))
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
 
-                    $query = "select * from appointmenttb;";
+                    $query = "select * from APPOINTMENT a inner join DOCTOR d ON a.DOCTOR_SPEC_ID = d.DOCTOR_SPEC_ID inner join PATIENT p ON a.PATIENT_ID = p.PATIENT_ID;";
                     $result = mysqli_query($con,$query);
                     $cnt=1;
                     while ($row = mysqli_fetch_array($result)){
                   ?>
                       <tr>
                         <td><?php echo $cnt;?></td>
-                        <td><?php echo $row['fname'];?> <?php echo $row['lname'];?></td>
-                        <td><?php echo $row['gender'];?></td>
-                        <td><?php echo $row['email'];?></td>
-                        <td><?php echo $row['contact'];?></td>
-                        <td><?php echo $row['doctor'];?></td>
-                        <td><?php echo '$'.$row['docFees'];?></td>
-                        <td><?php echo $row['appdate'];?></td>
-                        <td><?php echo $row['apptime'];?></td>
+                        <td><?php echo $row['PATIENT_FIRST_NAME'];?> <?php echo $row['PATIENT_LAST_NAME'];?></td>
+                        <td><?php echo $row['PATIENT_GENDER'];?></td>
+                        <td><?php echo $row['PATIENT_EMAIL'];?></td>
+                        <td><?php echo $row['PATIENT_CONTACT'];?></td>
+                        <td><?php echo $row['DOCTOR_NAME'];?></td>
+                        <td><?php echo '$'.$row['DOCTOR_FEES'];?></td>
+                        <td><?php echo $row['APPOINTMENT_DATE'];?></td>
+                        <td><?php echo $row['APPOINTMENT_TIME'];?></td>
                         <td>
-                    <?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))  
+                    <?php if(($row['USER_STATUS']==1) && ($row['DOCTOR_STATUS']==1))
                     {
-                      echo "Active";
+                      echo "Booked";
                     }
-                    if(($row['userStatus']==0) && ($row['doctorStatus']==1))  
+                    if(($row['USER_STATUS']==0) && ($row['DOCTOR_STATUS']==1))
                     {
                       echo "Cancelled by Patient";
                     }
 
-                    if(($row['userStatus']==1) && ($row['doctorStatus']==0))  
+                    if(($row['USER_STATUS']==1) && ($row['DOCTOR_STATUS']==0))
                     {
                       echo "Cancelled by Doctor";
                     }
@@ -500,7 +601,7 @@ if(isset($_POST['docsub1']))
           <div class="col-md-4"><label>Doctor Name:</label></div>
                   <div class="col-md-8"><input type="text" class="form-control" name="doctorname" onkeydown="return alphaOnly(event);" required></div><br><br>
                   <div class="col-md-4"><label>Username:</label></div>
-                  <div class="col-md-8"><input type="text" class="form-control" name="doctor" onkeydown="return alphaOnly(event);" required></div><br><br>
+                  <div class="col-md-8"><input type="text" class="form-control" name="doctor" onkeydown="return notAlphaOnly(event);" required></div><br><br>
                   <div class="col-md-4"><label>Specialization:</label></div>
                   <div class="col-md-8">
                    <select name="special" class="form-control" id="special" required="required">
@@ -533,8 +634,8 @@ if(isset($_POST['docsub1']))
         <form class="form-group" method="post" action="admin-panel1.php">
           <div class="row">
           
-                  <div class="col-md-4"><label>Email ID:</label></div>
-                  <div class="col-md-8"><input type="email"  class="form-control" name="demail" required></div><br><br>
+                  <div class="col-md-4"><label>Doctor ID:</label></div>
+                  <div class="col-md-8"><input type="text"  class="form-control" name="doc_id" required></div><br><br>
                   
                 </div>
           <input type="submit" name="docsub1" value="Delete Doctor" class="btn btn-primary" onclick="confirm('do you really want to delete?')">
@@ -549,7 +650,7 @@ if(isset($_POST['docsub1']))
          <div class="col-md-8">
       <form class="form-group" action="messearch.php" method="post">
         <div class="row">
-        <div class="col-md-10"><input type="text" name="mes_contact" placeholder="Enter Contact" class = "form-control"></div>
+        <div class="col-md-10"><input type="text" name="mes_contact" placeholder="Search Queries" class = "form-control"></div>
         <div class="col-md-2"><input type="submit" name="mes_search_submit" class="btn btn-primary" value="Search"></div></div>
       </form>
     </div>
@@ -570,7 +671,7 @@ if(isset($_POST['docsub1']))
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
 
-                    $query = "select * from contact;";
+                    $query = "select * from FEEDBACK;";
                     $result = mysqli_query($con,$query);
                     $cnt=1;
                     while ($row = mysqli_fetch_array($result)){
@@ -582,10 +683,10 @@ if(isset($_POST['docsub1']))
                   ?>
                       <tr>
                         <td><?php echo $cnt;?></td>
-                        <td><?php echo $row['name'];?></td>
-                        <td><?php echo $row['email'];?></td>
-                        <td><?php echo $row['contact'];?></td>
-                        <td><?php echo $row['message'];?></td>
+                        <td><?php echo $row['NAME'];?></td>
+                        <td><?php echo $row['EMAIL'];?></td>
+                        <td><?php echo $row['CONTACT'];?></td>
+                        <td><?php echo $row['MESSAGE'];?></td>
                       </tr>
                     <?php $cnt++; } ?>
                 </tbody>

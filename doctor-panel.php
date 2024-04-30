@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<?php 
+<?php
 include('func1.php');
 $con=mysqli_connect("localhost","root","","hospitalms");
 $doctor = $_SESSION['dname'];
 if(isset($_GET['cancel']))
   {
-    $query=mysqli_query($con,"update appointmenttb set doctorStatus='0' where ID = '".$_GET['ID']."'");
+    $id=$_GET['DOCTOR_ID'];
+    $query=mysqli_query($con,"update APPOINTMENT set DOCTOR_STATUS=0 where DOCTOR_ID = '".$_GET['DOCTOR_ID']."'");
     if($query)
     {
       echo "<script>alert('Your appointment successfully cancelled');</script>";
@@ -13,7 +14,7 @@ if(isset($_GET['cancel']))
   }
 
   // if(isset($_GET['prescribe'])){
-    
+
   //   $pid = $_GET['pid'];
   //   $ID = $_GET['ID'];
   //   $appdate = $_GET['appdate'];
@@ -21,7 +22,7 @@ if(isset($_GET['cancel']))
   //   $disease = $_GET['disease'];
   //   $allergy = $_GET['allergy'];
   //   $prescription = $_GET['prescription'];
-  //   $query=mysqli_query($con,"insert into prestb(doctor,pid,ID,appdate,apptime,disease,allergy,prescription) values ('$doctor',$pid,$ID,'$appdate','$apptime','$disease','$allergy','$prescription');");
+  //   $query=mysqli_query($con,"insert into PRESCRIPTION(doctor,pid,ID,appdate,apptime,disease,allergy,prescription) values ('$doctor',$pid,$ID,'$appdate','$apptime','$disease','$allergy','$prescription');");
   //   if($query)
   //   {
   //     echo "<script>alert('Prescribed successfully!');</script>";
@@ -40,15 +41,15 @@ if(isset($_GET['cancel']))
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="font-awesome-4.7.0/css/font-awesome.min.css">
+       <link rel="stylesheet" href="style.css">-->
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.min.css">
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
+
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
   <a class="navbar-brand" href="#"><i class="fa fa-hospital-o" aria-hidden="true"></i> Hospital Management System</a>
@@ -73,7 +74,7 @@ if(isset($_GET['cancel']))
 .list-group-item.active {
   z-index: 2;
     color: #fff;
-    background: #F0F2F0; 
+    background: #F0F2F0;
     background: -webkit-linear-gradient(to right, #000C40, #F0F2F0);
     background: linear-gradient(to right, #000C40, #F0F2F0);
     border-color: #c3c3c3;
@@ -92,10 +93,6 @@ if(isset($_GET['cancel']))
         <a class="nav-link" href="#"></a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0" method="post" action="search.php">
-      <input class="form-control mr-sm-2" type="text" placeholder="Enter contact number" aria-label="Search" name="contact">
-      <input type="submit" class="btn btn-primary" id="inputbtn" name="search_submit" value="Search">
-    </form>
   </div>
 </nav>
   </head>
@@ -112,13 +109,13 @@ if(isset($_GET['cancel']))
       <a class="list-group-item list-group-item-action active" href="#list-dash" role="tab" aria-controls="home" data-toggle="list">Dashboard</a>
       <a class="list-group-item list-group-item-action" href="#list-app" id="list-app-list" role="tab" data-toggle="list" aria-controls="home">Appointments</a>
       <a class="list-group-item list-group-item-action" href="#list-pres" id="list-pres-list" role="tab" data-toggle="list" aria-controls="home"> Prescription List</a>
-      
+
     </div><br>
   </div>
   <div class="col-md-8" style="margin-top: 3%;">
     <div class="tab-content" id="nav-tabContent" style="width: 950px;">
       <div class="tab-pane fade show active" id="list-dash" role="tabpanel" aria-labelledby="list-dash-list">
-        
+
               <div class="container-fluid container-fullw bg-white" >
               <div class="row">
 
@@ -129,9 +126,10 @@ if(isset($_GET['cancel']))
                       <h4 class="StepTitle" style="margin-top: 5%;"> View Appointments</h4>
                       <script>
                         function clickDiv(id) {
+                        console.log(id);
                           document.querySelector(id).click();
                         }
-                      </script>                      
+                      </script>
                       <p class="links cl-effect-1">
                         <a href="#list-app" onclick="clickDiv('#list-app-list')">
                           Appointment List
@@ -146,7 +144,7 @@ if(isset($_GET['cancel']))
                     <div class="panel-body">
                       <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-file-powerpoint-o fa-stack-1x fa-inverse"></i> </span>
                       <h4 class="StepTitle" style="margin-top: 5%;"> Prescriptions</h4>
-                        
+
                       <p class="links cl-effect-1">
                         <a href="#list-pres" onclick="clickDiv('#list-pres-list')">
                           Prescription List
@@ -154,15 +152,15 @@ if(isset($_GET['cancel']))
                       </p>
                     </div>
                   </div>
-                </div>    
+                </div>
 
              </div>
            </div>
          </div>
-    
+
 
     <div class="tab-pane fade" id="list-app" role="tabpanel" aria-labelledby="list-home-list">
-        
+
               <table class="table table-hover">
                 <thead>
                   <tr>
@@ -180,67 +178,68 @@ if(isset($_GET['cancel']))
                   </tr>
                 </thead>
                 <tbody>
-                  <?php 
+                  <?php
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
                     $dname = $_SESSION['dname'];
-                    $query = "select pid,ID,fname,lname,gender,email,contact,appdate,apptime,userStatus,doctorStatus from appointmenttb where doctor='$dname';";
+                    echo "<script>console.log($dname)</script>";
+                    $query = "select * from APPOINTMENT a inner join PATIENT p ON a.PATIENT_ID = p.PATIENT_ID inner join DOCTOR d on d.DOCTOR_ID = a.DOCTOR_ID where DOCTOR_NAME='$dname';";
                     $result = mysqli_query($con,$query);
                     $cnt=1;
                     while ($row = mysqli_fetch_array($result)){
                       ?>
                       <tr>
                       <td><?php echo $cnt;?></td>
-                        <td><?php echo $row['fname'];?> <?php echo $row['lname'];?></td>
-                        <td><?php echo $row['gender'];?></td>
-                        <td><?php echo $row['email'];?></td>
-                        <td><?php echo $row['contact'];?></td>
-                        <td><?php echo $row['appdate'];?></td>
-                        <td><?php echo $row['apptime'];?></td>
+                        <td><?php echo $row['PATIENT_FIRST_NAME'];?> <?php echo $row['PATIENT_LAST_NAME'];?></td>
+                        <td><?php echo $row['PATIENT_GENDER'];?></td>
+                        <td><?php echo $row['PATIENT_EMAIL'];?></td>
+                        <td><?php echo $row['PATIENT_CONTACT'];?></td>
+                        <td><?php echo $row['APPOINTMENT_DATE'];?></td>
+                        <td><?php echo $row['APPOINTMENT_TIME'];?></td>
                         <td>
-                    <?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))  
+                    <?php if(($row['USER_STATUS']==1) && ($row['DOCTOR_STATUS']==1))
                     {
-                      echo "Active";
+                      echo "Booked";
                     }
-                    if(($row['userStatus']==0) && ($row['doctorStatus']==1))  
+                    if(($row['USER_STATUS']==0) && ($row['DOCTOR_STATUS']==1))
                     {
                       echo "Cancelled by Patient";
                     }
 
-                    if(($row['userStatus']==1) && ($row['doctorStatus']==0))  
+                    if(($row['USER_STATUS']==1) && ($row['DOCTOR_STATUS']==0))
                     {
                       echo "Cancelled by You";
                     }
                         ?></td>
 
                      <td>
-                        <?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))  
+                        <?php if(($row['USER_STATUS']==1) && ($row['DOCTOR_STATUS']==1))
                         { ?>
 
-													
-	                        <a href="doctor-panel.php?ID=<?php echo $row['ID']?>&cancel=update" 
+
+	                        <a href="doctor-panel.php?DOCTOR_ID=<?php echo $row['DOCTOR_ID']?>&cancel=update?>"
                               onClick="return confirm('Are you sure you want to cancel this appointment ?')"
                               title="Cancel Appointment" tooltip-placement="top" tooltip="Remove"><button class="btn btn-danger">Cancel</button></a>
 	                        <?php } else {
 
                                 echo "Cancelled";
                                 } ?>
-                        
+
                         </td>
 
                         <td>
 
-                        <?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))  
+                        <?php if(($row['USER_STATUS']==1) && ($row['DOCTOR_STATUS']==1))
                         { ?>
 
-                        <a href="prescribe.php?pid=<?php echo $row['pid']?>&ID=<?php echo $row['ID']?>&fname=<?php echo $row['fname']?>&lname=<?php echo $row['lname']?>&appdate=<?php echo $row['appdate']?>&apptime=<?php echo $row['apptime']?>"
+                        <a href="prescribe.php?pid=<?php echo $row['PATIENT_ID']?>&did=<?php echo $row['DOCTOR_ID']?>&apid=<?php echo $row['APPOINTMENT_ID']?>"
                         tooltip-placement="top" tooltip="Remove" title="prescribe">
                         <button class="btn btn-success">Prescribe</button></a>
                         <?php } else {
 
                             echo "-";
                             } ?>
-                        
+
                         </td>
 
 
@@ -257,7 +256,7 @@ if(isset($_GET['cancel']))
         <table class="table table-hover">
                 <thead>
                   <tr>
-                    
+
                     <th scope="col">#</th>
                     <th scope="col">Patient</th>
                     <th scope="col">Appointment Date</th>
@@ -269,31 +268,28 @@ if(isset($_GET['cancel']))
                   </tr>
                 </thead>
                 <tbody>
-                  <?php 
+                  <?php
 
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
-
-                    $query = "select pid,fname,lname,ID,appdate,apptime,disease,allergy,prescription,presamt from prestb where doctor='$doctor';";
-                    
+                    $query = "select * from PRESCRIPTION pr inner join PATIENT p ON pr.PATIENT_ID = p.PATIENT_ID inner join DOCTOR d ON d.DOCTOR_ID = pr.DOCTOR_ID  inner join APPOINTMENT a ON a.PATIENT_ID = p.PATIENT_ID where DOCTOR_NAME='$doctor';";
                     $result = mysqli_query($con,$query);
                     if(!$result){
                       echo mysqli_error($con);
                     }
-                    
+
                     $cnt=1;
                     while ($row = mysqli_fetch_array($result)){
                   ?>
                       <tr>
                         <td><?php echo $cnt;?></td>
-                        <td><?php echo $row['fname'];?> <?php echo $row['lname'];?></td>                        
-                        <td><?php echo $row['appdate'];?></td>
-                        <td><?php echo $row['apptime'];?></td>
-                        <td><?php echo $row['disease'];?></td>
-                        <td><?php echo $row['allergy'];?></td>
-                        <td><?php echo $row['prescription'];?></td>
-                        <td><?php echo $row['presamt'];?></td>
-                    
+                        <td><?php echo $row['PATIENT_FIRST_NAME'];?></td>
+                        <td><?php echo $row['APPOINTMENT_DATE'];?></td>
+                        <td><?php echo $row['APPOINTMENT_TIME'];?></td>
+                        <td><?php echo $row['DISEASE'];?></td>
+                        <td><?php echo $row['ALLERGY'];?></td>
+                        <td><?php echo $row['PRESCRIPTION'];?></td>
+                        <td><?php echo $row['PRESCRIPTION_AMOUNT'];?></td>
                       </tr>
                     <?php $cnt++; }
                     ?>
@@ -305,7 +301,7 @@ if(isset($_GET['cancel']))
 
 
       <div class="tab-pane fade" id="list-app" role="tabpanel" aria-labelledby="list-pat-list">
-        
+
               <table class="table table-hover">
                 <thead>
                   <tr>
@@ -320,15 +316,15 @@ if(isset($_GET['cancel']))
                   </tr>
                 </thead>
                 <tbody>
-                  <?php 
+                  <?php
 
                     $con=mysqli_connect("localhost","root","","hospitalms");
                     global $con;
 
-                    $query = "select * from appointmenttb;";
+                    $query = "select * from APPOINTMENT;";
                     $result = mysqli_query($con,$query);
                     while ($row = mysqli_fetch_array($result)){
-              
+
                       #$fname = $row['fname'];
                       #$lname = $row['lname'];
                       #$email = $row['email'];

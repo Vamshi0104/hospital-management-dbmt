@@ -11,10 +11,10 @@ include("newfunc.php");
 if(isset($_POST['patient_search_submit']))
 {
 	$contact=$_POST['patient_contact'];
-	$query = "select * from patreg where contact= '$contact' or fname= '$contact' or lname= '$contact' or email= '$contact';";
+	$query = "select * from PATIENT where PATIENT_CONTACT= '$contact' or PATIENT_FIRST_NAME= '$contact' or PATIENT_LAST_NAME= '$contact' or PATIENT_EMAIL= '$contact';";
   $result = mysqli_query($con,$query);
   $row=mysqli_fetch_array($result);
-  if($row['lname']=="" & $row['email']=="" & $row['contact']=="" & $row['password']==""){
+  if($row['PATIENT_LAST_NAME']=="" & $row['PATIENT_EMAIL']=="" & $row['PATIENT_CONTACT']=="" & $row['PATIENT_PASSWORD']==""){
     echo "<script> alert('No entries found! Please enter valid details'); 
           window.location.href = 'admin-panel1.php#list-doc';</script>";
   }
@@ -29,23 +29,20 @@ if(isset($_POST['patient_search_submit']))
       <th scope='col'>Last Name</th>
       <th scope='col'>Email</th>
       <th scope='col'>Contact</th>
-      <th scope='col'>Password</th>
     </tr>
   </thead>
   <tbody>";
 
 	
-		    $fname = $row['fname'];
-        $lname = $row['lname'];
-        $email = $row['email'];
-        $contact = $row['contact'];
-        $password = $row['password'];
+		    $fname = $row['PATIENT_FIRST_NAME'];
+        $lname = $row['PATIENT_LAST_NAME'];
+        $email = $row['PATIENT_EMAIL'];
+        $contact = $row['PATIENT_CONTACT'];
         echo "<tr>
           <td>$fname</td>
           <td>$lname</td>
           <td>$email</td>
           <td>$contact</td>
-          <td>$password</td>
         </tr>";
     
 	echo "</tbody></table><center><a href='admin-panel1.php' class='btn btn-light'>Back to dashboard</a></div></center></div></div></div>";

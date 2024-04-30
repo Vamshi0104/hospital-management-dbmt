@@ -12,10 +12,10 @@ include("newfunc.php");
 if(isset($_POST['doctor_search_submit']))
 {
 	$contact=$_POST['doctor_contact'];
-  $query = "select * from doctb where email= '$contact' or username= '$contact' or doctorname= '$contact' or spec= '$contact' or docFees= '$contact';";
+  $query = "select * from DOCTOR where DOCTOR_EMAIL= '$contact' or DOCTOR_ID= '$contact' or DOCTOR_NAME= '$contact' or DOCTOR_SPEC= '$contact' or DOCTOR_FEES= '$contact';";
   $result = mysqli_query($con,$query);
   $row=mysqli_fetch_array($result);
-  if($row['username']=="" & $row['password']=="" & $row['email']=="" & $row['docFees']==""){
+  if($row['DOCTOR_ID']=="" & $row['DOCTOR_PASSWORD']=="" & $row['DOCTOR_EMAIL']=="" & $row['DOCTOR_FEES']==""){
     echo "<script> alert('No entries found!'); 
           window.location.href = 'admin-panel1.php#list-doc';</script>";
   }
@@ -26,26 +26,26 @@ if(isset($_POST['doctor_search_submit']))
 <table class='table table-hover'>
   <thead>
     <tr>
-      <th scope='col'>Username</th>
-      <th scope='col'>Password</th>
+      <th scope='col'>UserName</th>
+      <th scope='col'>DoctorName</th>
       <th scope='col'>Email</th>
       <th scope='col'>Consultancy Fees</th>
     </tr>
   </thead>
   <tbody>";
 
-	// while ($row=mysqli_fetch_array($result)){
-		    $username = $row['username'];
-        $password = $row['password'];
-        $email = $row['email'];
-        $docFees = $row['docFees'];
+// 	 while ($row=mysqli_fetch_array($result)){
+		$username = $row['DOCTOR_ID'];
+		$name = $row['DOCTOR_NAME'];
+        $email = $row['DOCTOR_EMAIL'];
+        $docFees = $row['DOCTOR_FEES'];
         echo "<tr>
           <td>$username</td>
-          <td>$password</td>
+          <td>$name</td>
           <td>$email</td>
           <td>$docFees</td>
         </tr>";
-	// }
+	 //}
 	echo "</tbody></table><center><a href='admin-panel1.php' class='btn btn-light'>Back to dashboard</a></div></center></div></div></div>";
 }
   }
